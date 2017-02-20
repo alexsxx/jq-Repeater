@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>jq-Repeater</title>
+    <meta name="description" content="jq-Repeater">
+    <meta name="author" content="">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <script src="plugins/jquery.min.js"></script>
+    <script src="plugins/jq-repeater.min.js"></script>
+    <style>
+        /*.jq-hide {
+            display: none;
+        }*/
+    </style>
+
+    <script>
+        $(function () {
+
+            $(document).on('ValueChanged', function (e, newVal, propName, obj, oldVal, objIndex) { console.log(newVal) });
+            $(document).on('Rendered', function (e, colName) { console.log(colName); });
+            jqRepeater({ hideClass: 'hidden' })
+
+                .bind({
+                    items:
+                    [
+                        { name: 'el1', ID: 1, checked: false, arr: [{ checked: true, test: "z", subarray: ["a", "b", "c"] }] }, // , {booltest: true, test: "a", subarray: ["d", "e", "f"] }
+                        { name: 'el2', ID: 2, checked: true, arr: [{ checked: false, test: "q", subarray: ["d", "e", "f"] }] }, //
+                        { name: 'el3', ID: 3, checked: false, arr: [{ checked: true, test: "h", subarray: ["g", "h", "i"] }] },
+                        { name: 'el4', ID: 4, checked: true, arr: [{ checked: true, test: "j", subarray: ["l", "m", "o"] }] }
+                    ]
+                },
+                {
+                    items: { pagination: { rowsXpage: 2 } }
+                });
+
+            $('#btnAdd').click(function () {
+                jqRepeater().addElements('items', [
+                    { name: $('#txtName').val(), ID: parseInt($('#txtID').val()), checked: $('#chbChecked').prop('checked'), arr: [] }
+                ]);
+            });
+            $('#btnGetCollection').click(function() {
+                $('#collectionContent').val(JSON.stringify(jqRepeater().getCollection('items')));
+            });
+        });
+
+    </script>
+
+    <div jq-repeater="item in items">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-1">
+                    {{$index+1}})
+                </div>
+                <div class="col-md-3" jq-class="text-danger:{{$item.checked}}">
+                    Name:<span jq-model="{{$item.name}}"></span>
+                    <span jq-show="{{$item.checked}}">[Editable]</span>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" jq-model="{{$item.name}}" jq-disabled="{{_!$item.checked}}" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <input type="checkbox" jq-model="{{$item.checked}}" />
+                </div>
+                <div class="col-md-3">
+                    <a href="javascript:;" jq-remove="{{$index}}" class="btn btn-danger">REMOVE</a>
+                </div>
+            </div>
+            <div class="col-md-6" jq-repeater="subitem in item.arr">
+                <span jq-show="{{#$subitem.checked}}">[Editable]</span>
+                <input type="checkbox" jq-model="{{#$subitem.checked}}" />
+                <span jq-model="{{#$subitem.test}}"></span>
+                <input type="text" jq-model="{{#$subitem.test}}" />
+                <span jq-repeater="subsubitem in subitem.subarray">
+                    {{##subsubitem}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-3">
+                <label>Name</label>
+                <input type="text" id="txtName" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label>ID</label>
+                <input type="number" id="txtID" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <input type="checkbox" value="Checked" id="chbChecked" />
+            </div>
+            <div class="col-md-3">
+                <a id="btnAdd" href="javascript:;" class="btn btn-primary">ADD</a>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <textarea id="collectionContent" class="form-control" style="height:300px;" readonly="readonly"></textarea>
+            <br />
+            <a id="btnGetCollection" href="javascript:;" class="btn btn-primary">GET COLLECTION</a>
+        </div>
+    </div>
+
+</body>
+</html>

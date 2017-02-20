@@ -1,0 +1,26 @@
+{
+  "name": "jq-repeater",
+  "description": "jq-Repeater plugin useful for templating with angular-like html tags",
+  "main": [
+    "js/jq-repeater.js"
+  ],
+  "version": "v8.7.4",
+  "dependencies": {
+    "jQuery": "https://github.com/jquery/jquery.git"
+  },
+  "repository": {
+	"type": "git",
+	"url": "https://github.com/alexsxx/jq-Repeater.git"
+  },
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "templating"
+  ],
+  "authors": [
+    "Alessandro Nati"
+  ],
+  "license": "MIT",
+  "private": false
+}
